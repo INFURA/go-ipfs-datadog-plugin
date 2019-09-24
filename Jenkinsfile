@@ -1,0 +1,4 @@
+infura.goZeroConfig([
+  goModules: true
+])
+
