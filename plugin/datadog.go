@@ -18,7 +18,7 @@ var Plugins = []plugin.Plugin{
 
 var _ plugin.PluginTracer = &DatadogPlugin{}
 
-var tracerName = "#TRACER-NAME-NOT-SET"
+var tracerName = "go-ipfs"
 
 const tracerEnv = "IPFS_TRACER_NAME"
 
