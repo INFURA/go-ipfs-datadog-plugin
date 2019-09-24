@@ -4,10 +4,13 @@ import (
 	"os"
 
 	"github.com/ipfs/go-ipfs/plugin"
+	logging "github.com/ipfs/go-log"
 	"github.com/opentracing/opentracing-go"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/opentracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
+
+var log = logging.Logger("datadog")
 
 var Plugins = []plugin.Plugin{
 	&DatadogPlugin{},
@@ -38,10 +41,9 @@ func (d *DatadogPlugin) Init() error {
 }
 
 func (d *DatadogPlugin) InitTracer() (opentracing.Tracer, error) {
-	// Start the regular tracer and return it as an opentracing.Tracer interface. You
-	// may use the same set of options as you normally would with the Datadog tracer.
 	return opentracer.New(
 		tracer.WithServiceName(tracerName),
+		tracer.WithLogger(logger{}),
 		tracer.WithRuntimeMetrics(),
 	), nil
 }
@@ -49,4 +51,11 @@ func (d *DatadogPlugin) InitTracer() (opentracing.Tracer, error) {
 func (d *DatadogPlugin) Close() error {
 	tracer.Stop()
 	return nil
+}
+
+// logger is an adaptor between ddtrace.Logger and go-log
+type logger struct{}
+
+func (logger) Log(msg string) {
+	log.Info(msg)
 }
