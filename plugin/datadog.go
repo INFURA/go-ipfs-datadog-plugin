@@ -45,6 +45,7 @@ func (d *DatadogPlugin) InitTracer() (opentracing.Tracer, error) {
 		tracer.WithServiceName(tracerName),
 		tracer.WithLogger(logger{}),
 		tracer.WithRuntimeMetrics(),
+		tracer.WithAnalytics(true),
 	), nil
 }
 
