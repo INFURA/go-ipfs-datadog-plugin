@@ -6,6 +6,7 @@ import (
 	"github.com/ipfs/go-ipfs/plugin"
 	logging "github.com/ipfs/go-log"
 	"github.com/opentracing/opentracing-go"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/opentracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
@@ -46,6 +47,7 @@ func (d *DatadogPlugin) InitTracer() (opentracing.Tracer, error) {
 		tracer.WithLogger(logger{}),
 		tracer.WithRuntimeMetrics(),
 		tracer.WithAnalytics(true),
+		tracer.WithGlobalTag(ext.ResourceName, "default"),
 	), nil
 }
 
