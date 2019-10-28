@@ -16,15 +16,6 @@ IPFS_VERSION ?= $(lastword $(shell $(GOCC) list -m github.com/ipfs/go-ipfs))
 
 .PHONY: install build
 
-# We currently use a forked go-ipfs but
-# the script to make sure the plugins have the exact same version as go-ipfs
-# actually overide this fork with the normal protocol labs one. We have to disable
-# it for now and deal with the version manually.
-go.mod: FORCE
-#	./set-target.sh $(IPFS_VERSION)
-
-FORCE:
-
 datadog-plugin.so: plugin/main/main.go go.mod
 	$(GOCC) build $(GOFLAGS) -buildmode=plugin -o "$@" "$<"
 	chmod +x "$@"
