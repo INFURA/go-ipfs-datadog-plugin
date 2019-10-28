@@ -12,7 +12,3 @@ require (
 	github.com/tinylib/msgp v1.1.0 // indirect
 	gopkg.in/DataDog/dd-trace-go.v1 v1.18.0
 )
-
-// fork to support proper closing of Tracer plugins
-// https://github.com/ipfs/go-ipfs/pull/6672
-replace github.com/ipfs/go-ipfs => github.com/INFURA/go-ipfs v0.0.0-20190926031411-04fabe5e6b7d
