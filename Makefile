@@ -16,6 +16,11 @@ IPFS_VERSION ?= $(lastword $(shell $(GOCC) list -m github.com/ipfs/go-ipfs))
 
 .PHONY: install build
 
+go.mod: FORCE
+	./set-target.sh $(IPFS_VERSION)
+
+FORCE:
+
 datadog-plugin.so: plugin/main/main.go go.mod
 	$(GOCC) build $(GOFLAGS) -buildmode=plugin -o "$@" "$<"
 	chmod +x "$@"
