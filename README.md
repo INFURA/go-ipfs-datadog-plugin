@@ -2,9 +2,15 @@
 
 Datadog tracing plugin for go-ipfs.
 
-**NOTE:** This plugin doesn't implement any tracing on it's own, it simply configure the Datadog tracer to collect the traces and relay them to the agent. `go-ipfs` tracing instrumentation is partial at the moment but should improve over time.
 
-**NOTE:** Plugins only work on Linux and MacOS at the moment. You can track the progress of this issue here: https://github.com/golang/go/issues/19282
+## Caveats
+
+- This plugin doesn't implement any tracing, it simply configures the Datadog tracer to collect the traces and relay them to the agent. `go-ipfs` tracing instrumentation is partial at the moment but should improve over time.
+
+- Plugins only work on Linux and MacOS at the moment. You can track the progress of this issue here: https://github.com/golang/go/issues/19282
+
+- If you are using go-ipfs 0.4.22 or older, some traces will be lost. See: https://github.com/ipfs/go-ipfs/pull/6672
+
 
 ## Building and Installing
 
@@ -30,14 +36,11 @@ To update the go-ipfs, run:
 
 Copy `datadog-plugin.so` to `$IPFS_DIR/plugins/datadog-plugin.so` (or run `make install` if you are installing locally)
 
-## Caveats
-
-- If you are using go-ipfs 0.4.22 or older, some traces will be lost. See:
-  https://github.com/ipfs/go-ipfs/pull/6672
 
 ## References
 
 - Boilerplate for this repo is based on https://github.com/ipfs/go-ipfs-example-plugin
+
 
 ## License
 
