@@ -1,7 +1,7 @@
 package main
 
 import (
-	plugin "github.com/INFURA/go-datadog-plugin/plugin"
+	plugin "github.com/INFURA/go-ipfs-datadog-plugin/plugin"
 )
 
 var Plugins = plugin.Plugins //nolint
