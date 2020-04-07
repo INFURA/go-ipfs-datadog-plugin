@@ -33,7 +33,7 @@ func (d *DatadogPlugin) Version() string {
 	return "0.0.1"
 }
 
-func (d *DatadogPlugin) Init() error {
+func (d *DatadogPlugin) Init(env *plugin.Environment) error {
 	maybeName := os.Getenv(tracerEnv)
 	if maybeName != "" {
 		tracerName = maybeName
