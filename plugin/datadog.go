@@ -15,6 +15,7 @@ var log = logging.Logger("datadog")
 
 var Plugins = []plugin.Plugin{
 	&DatadogPlugin{},
+	&LoggerPlugin{},
 }
 
 var _ plugin.PluginTracer = &DatadogPlugin{}
