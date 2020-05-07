@@ -22,8 +22,6 @@ var _ plugin.PluginTracer = &DatadogPlugin{}
 
 var tracerName = "go-ipfs"
 
-const tracerNameKey = "IpfsTracerName"
-
 // "Plugins": {
 //	"datadog": {
 //	  "Config": {

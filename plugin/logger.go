@@ -9,10 +9,6 @@ import (
 	"github.com/ipfs/go-ipfs/plugin"
 )
 
-// LoggerPlugin controls which ipfs subsystems loggers are enabled
-// These subsystems are defined in ipfs config Plugins
-type LoggerPlugin struct{}
-
 var _ plugin.Plugin = &LoggerPlugin{}
 
 // "Plugins": {
@@ -31,6 +27,10 @@ type loggerConfig struct {
 	// log level for the whitelisted subsystems
 	LogLevel string
 }
+
+// LoggerPlugin controls which ipfs subsystems loggers are enabled
+// These subsystems are defined in ipfs config Plugins
+type LoggerPlugin struct{}
 
 func (l LoggerPlugin) Name() string {
 	return "logger"
