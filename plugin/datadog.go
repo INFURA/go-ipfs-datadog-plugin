@@ -22,22 +22,14 @@ var _ plugin.PluginTracer = &DatadogPlugin{}
 
 var tracerName = "go-ipfs"
 
-// "Plugins": {
-//	"datadog": {
-//	  "Config": {
-//		"IpfsTracerName": "go-ipfs"
-//	  },
-//	  "Disabled": false
-//	}
-// }
 type datadogConfig struct {
-	IpfsTracerName string
+	TracerName string
 }
 
 type DatadogPlugin struct{}
 
 func (d *DatadogPlugin) Name() string {
-	return "datadog"
+	return "datadog-tracer"
 }
 
 func (d *DatadogPlugin) Version() string {
@@ -56,8 +48,8 @@ func (d *DatadogPlugin) Init(env *plugin.Environment) error {
 	if err := json.Unmarshal(bytes, &config); err != nil {
 		return err
 	}
-	if config.IpfsTracerName != "" {
-		tracerName = config.IpfsTracerName
+	if config.TracerName != "" {
+		tracerName = config.TracerName
 	}
 	return nil
 }

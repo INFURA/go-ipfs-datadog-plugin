@@ -9,40 +9,26 @@ import (
 	"github.com/ipfs/go-ipfs/plugin"
 )
 
+const defaultLevel = "error"
+
 var _ plugin.Plugin = &LoggerPlugin{}
 
-// "Plugins": {
-//      "logger": {
-//        "Config": {
-//            "Subsystems": ["dht","relay","corerepo"],
-//            "LogLevel": "error"
-//        },
-//        "Disabled": false
-//      }
-//  }
 type loggerConfig struct {
-	// whitelisted subsystems
-	Subsystems []string
-
-	// log level for the whitelisted subsystems
-	LogLevel string
+	Levels       map[string][]string
+	DefaultLevel string
 }
 
-// LoggerPlugin controls which ipfs subsystems loggers are enabled
-// These subsystems are defined in ipfs config Plugins
 type LoggerPlugin struct{}
 
 func (l LoggerPlugin) Name() string {
-	return "logger"
+	return "datadog-logger"
 }
 
 func (l LoggerPlugin) Version() string {
 	return "0.0.1"
 }
 
-// Set log levels for each subsystem
-// info level for whitelisted subsystem
-// fatal level for all others
+// Set log levels for each system (logger)
 func (l LoggerPlugin) Init(env *plugin.Environment) error {
 	// If no plugin config given, exit with default settings
 	if env == nil || env.Config == nil {
@@ -54,11 +40,18 @@ func (l LoggerPlugin) Init(env *plugin.Environment) error {
 		return err
 	}
 
-	// set log levels
-	logging.SetAllLoggers(logging.LevelFatal)
-	for _, subsystem := range config.Subsystems {
-		if err := logging.SetLogLevel(subsystem, config.LogLevel); err != nil {
-			return fmt.Errorf("set log level failed for subsystem: %s. Error: %s", subsystem, err.Error())
+	// set default log level for all loggers
+	defaultLevel, err := logging.LevelFromString(config.DefaultLevel)
+	if err != nil {
+		return err
+	}
+
+	logging.SetAllLoggers(defaultLevel)
+	for level, subsystems := range config.Levels {
+		for _, subsystem := range subsystems {
+			if err := logging.SetLogLevel(subsystem, level); err != nil {
+				return fmt.Errorf("set log level failed for subsystem: %s. Error: %s", subsystem, err.Error())
+			}
 		}
 	}
 
@@ -73,7 +66,7 @@ func (l LoggerPlugin) loadConfig(envConfig interface{}) (*loggerConfig, error) {
 	}
 
 	config := loggerConfig{
-		LogLevel: "error",
+		DefaultLevel: defaultLevel,
 	}
 	if err = json.Unmarshal(bytes, &config); err != nil {
 		return nil, err
