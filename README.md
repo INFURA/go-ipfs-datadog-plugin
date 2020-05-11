@@ -1,11 +1,10 @@
 # go-ipfs-datadog-plugin
 
-Datadog tracing plugin for go-ipfs.
-
+This repository contains the following `go-ipfs` plugins:
+- Datadog tracing plugin configures the Datadog tracer to collect the traces and relay them to the agent. `go-ipfs` tracing instrumentation is partial at the moment but should improve over time.
+- Datadog logger plugin allows users to set log levels for each `go-ipfs` subsystem. 
 
 ## Caveats
-
-- This plugin doesn't implement any tracing, it simply configures the Datadog tracer to collect the traces and relay them to the agent. `go-ipfs` tracing instrumentation is partial at the moment but should improve over time.
 
 - Plugins only work on Linux and MacOS at the moment. You can track the progress of this issue here: https://github.com/golang/go/issues/19282
 
@@ -36,6 +35,55 @@ To update the go-ipfs, run:
 
 Copy `datadog-plugin.so` to `$IPFS_DIR/plugins/datadog-plugin.so` (or run `make install` if you are installing locally)
 
+### Configuration
+
+Define plugin configurations variables in the ipfs config file.
+
+- datadog-logger config:
+```
+{
+...
+"Plugins": {
+    "Plugins": {
+    ...
+      "datadog-logger": {
+        "Config": {
+            "Levels": {
+                "fatal": ["system1", "system2", ...],
+                "error": [...]
+                "warn": [...]
+                ...
+            },
+            "DefaultLevel": "info"
+        },
+        "Disabled": false
+      },
+    ...
+    }
+  },
+...
+}
+```
+
+- datadog-tracer config:
+```
+{
+...
+"Plugins": {
+    "Plugins": {
+      ...
+      "datadog-tracer": {
+        "Config": {
+            "TracerName": "go-ipfs-custom"
+        },
+        "Disabled": false
+      }
+      ...
+    }
+  },
+...
+}
+```
 
 ## References
 

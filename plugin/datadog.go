@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"os"
+	"encoding/json"
 
 	"github.com/ipfs/go-ipfs/plugin"
 	logging "github.com/ipfs/go-log"
@@ -15,18 +15,21 @@ var log = logging.Logger("datadog")
 
 var Plugins = []plugin.Plugin{
 	&DatadogPlugin{},
+	&LoggerPlugin{},
 }
 
 var _ plugin.PluginTracer = &DatadogPlugin{}
 
 var tracerName = "go-ipfs"
 
-const tracerEnv = "IPFS_TRACER_NAME"
+type datadogConfig struct {
+	TracerName string
+}
 
 type DatadogPlugin struct{}
 
 func (d *DatadogPlugin) Name() string {
-	return "datadog"
+	return "datadog-tracer"
 }
 
 func (d *DatadogPlugin) Version() string {
@@ -34,9 +37,19 @@ func (d *DatadogPlugin) Version() string {
 }
 
 func (d *DatadogPlugin) Init(env *plugin.Environment) error {
-	maybeName := os.Getenv(tracerEnv)
-	if maybeName != "" {
-		tracerName = maybeName
+	if env == nil || env.Config == nil {
+		return nil
+	}
+	bytes, err := json.Marshal(env.Config)
+	if err != nil {
+		return err
+	}
+	config := datadogConfig{}
+	if err := json.Unmarshal(bytes, &config); err != nil {
+		return err
+	}
+	if config.TracerName != "" {
+		tracerName = config.TracerName
 	}
 	return nil
 }
