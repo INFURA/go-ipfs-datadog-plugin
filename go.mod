@@ -8,5 +8,5 @@ require (
 	github.com/ipfs/go-log v1.0.4
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/philhofer/fwd v1.0.0 // indirect
-	gopkg.in/DataDog/dd-trace-go.v1 v1.26.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.28.0
 )
