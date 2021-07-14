@@ -11,14 +11,7 @@ import (
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
-var log = logging.Logger("datadog")
-
-var Plugins = []plugin.Plugin{
-	&DatadogPlugin{},
-	&LoggerPlugin{},
-}
-
-var _ plugin.PluginTracer = &DatadogPlugin{}
+var _ plugin.PluginTracer = &TracingPlugin{}
 
 var tracerName = "go-ipfs"
 
@@ -26,17 +19,17 @@ type datadogConfig struct {
 	TracerName string
 }
 
-type DatadogPlugin struct{}
+type TracingPlugin struct{}
 
-func (d *DatadogPlugin) Name() string {
+func (d *TracingPlugin) Name() string {
 	return "datadog-tracer"
 }
 
-func (d *DatadogPlugin) Version() string {
+func (d *TracingPlugin) Version() string {
 	return "0.0.1"
 }
 
-func (d *DatadogPlugin) Init(env *plugin.Environment) error {
+func (d *TracingPlugin) Init(env *plugin.Environment) error {
 	if env == nil || env.Config == nil {
 		return nil
 	}
@@ -54,7 +47,7 @@ func (d *DatadogPlugin) Init(env *plugin.Environment) error {
 	return nil
 }
 
-func (d *DatadogPlugin) InitTracer() (opentracing.Tracer, error) {
+func (d *TracingPlugin) InitTracer() (opentracing.Tracer, error) {
 	return opentracer.New(
 		tracer.WithServiceName(tracerName),
 		tracer.WithLogger(logger{}),
@@ -64,10 +57,12 @@ func (d *DatadogPlugin) InitTracer() (opentracing.Tracer, error) {
 	), nil
 }
 
-func (d *DatadogPlugin) Close() error {
+func (d *TracingPlugin) Close() error {
 	tracer.Stop()
 	return nil
 }
+
+var log = logging.Logger("datadog")
 
 // logger is an adaptor between ddtrace.Logger and go-log
 type logger struct{}
