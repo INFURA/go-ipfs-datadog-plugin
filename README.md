@@ -2,6 +2,7 @@
 
 This repository contains the following `go-ipfs` plugins:
 - Datadog tracing plugin configures the Datadog tracer to collect the traces and relay them to the agent. `go-ipfs` tracing instrumentation is partial at the moment but should improve over time.
+- Datadog continuous profiler pluging configure the Datadog profiler to capture CPU and memory usage over time.
 - Datadog logger plugin allows users to set log levels for each `go-ipfs` subsystem. 
 - Datadog metrics plugin configure a datadog exporter for OpenCensus metrics.
 
@@ -84,6 +85,24 @@ Define plugin configurations variables in the ipfs config file.
   },
 ...
 }
+```
+
+- datadog-profiler config:
+ ```
+...
+"Plugins": {
+    "Plugins": {
+      ...
+      "datadog-profiler": {
+        "Config": {
+            "TracerName": "go-ipfs-custom"
+        },
+        "Disabled": false
+      }
+      ...
+    }
+  },
+...
 ```
 
 ## References

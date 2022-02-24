@@ -9,16 +9,18 @@ import (
 	"github.com/ipfs/go-ipfs/plugin"
 )
 
-const defaultLevel = "error"
+const defaultLoggerLevel = "error"
 
 var _ plugin.Plugin = &LoggerPlugin{}
 
 type loggerConfig struct {
-	Levels       map[string][]string
-	DefaultLevel string
+	Levels       map[string][]string `json:"Levels"`
+	DefaultLevel string              `json:"DefaultLevel"`
 }
 
-type LoggerPlugin struct{}
+type LoggerPlugin struct {
+	conf loggerConfig
+}
 
 func (l LoggerPlugin) Name() string {
 	return "datadog-logger"
@@ -29,25 +31,20 @@ func (l LoggerPlugin) Version() string {
 }
 
 // Set log levels for each system (logger)
-func (l LoggerPlugin) Init(env *plugin.Environment) error {
-	// If no plugin config given, exit with default settings
-	if env == nil || env.Config == nil {
-		return nil
-	}
-
-	config, err := l.loadConfig(env.Config)
+func (l *LoggerPlugin) Init(env *plugin.Environment) error {
+	err := l.loadConfig(env)
 	if err != nil {
 		return err
 	}
 
 	// set default log level for all loggers
-	defaultLevel, err := logging.LevelFromString(config.DefaultLevel)
+	defaultLevel, err := logging.LevelFromString(l.conf.DefaultLevel)
 	if err != nil {
 		return err
 	}
-
 	logging.SetAllLoggers(defaultLevel)
-	for level, subsystems := range config.Levels {
+
+	for level, subsystems := range l.conf.Levels {
 		for _, subsystem := range subsystems {
 			if err := logging.SetLogLevel(subsystem, level); err != nil {
 				return fmt.Errorf("set log level failed for subsystem: %s. Error: %s", subsystem, err.Error())
@@ -58,19 +55,17 @@ func (l LoggerPlugin) Init(env *plugin.Environment) error {
 	return nil
 }
 
-func (l LoggerPlugin) loadConfig(envConfig interface{}) (*loggerConfig, error) {
+func (l *LoggerPlugin) loadConfig(env *plugin.Environment) error {
 	// load config data
-	bytes, err := json.Marshal(envConfig)
+	bytes, err := json.Marshal(env.Config)
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	config := loggerConfig{
-		DefaultLevel: defaultLevel,
+	if err = json.Unmarshal(bytes, &l.conf); err != nil {
+		return err
 	}
-	if err = json.Unmarshal(bytes, &config); err != nil {
-		return nil, err
+	if l.conf.DefaultLevel == "" {
+		l.conf.DefaultLevel = defaultLoggerLevel
 	}
-
-	return &config, nil
+	return nil
 }
