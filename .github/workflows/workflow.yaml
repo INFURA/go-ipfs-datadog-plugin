@@ -21,8 +21,12 @@ jobs:
           go mod download
           go mod vendor
           go get -u github.com/jstemmer/go-junit-report
-          which go-junit-report
       - name: Lint
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.28
+      - name: Unit Tests
+        run: |
+          set -o pipefail
+          SKIP_E2E=1 go test ./... -v 2>&1 | tee test.log
+          cat test.log | go-junit-report > test-report.xml
