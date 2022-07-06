@@ -11,23 +11,14 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: Setup Go
-        uses: actions/setup-go@v3
+      - name: Check out actions
+        uses: actions/checkout@v2
         with:
-          go-version: 1.16.8
-      - name: Install deps
-        run: |
-          export GOPATH=$(go env GOROOT)
-          go mod download
-          go mod vendor
-          go get -u github.com/jstemmer/go-junit-report
-      - name: Lint
-        uses: golangci/golangci-lint-action@v3
+          repository: infura/ghaction-packed
+          token: ${{ secrets.JENKINS_INF_ACTIONS_PRIVATE_REPO_READ_TOKEN }}
+          ref: go-action
+          path: .ghaction-packed
+      - name: Lint and Test
+        uses: ./.ghaction-packed/go/zeroconfig
         with:
-          version: v1.28
-          args: "-v"
-      - name: Unit Tests
-        run: |
-          set -o pipefail
-          SKIP_E2E=1 go test ./... -v 2>&1 | tee test.log
-          cat test.log | go-junit-report > test-report.xml
+          go_version: 1.16.8
