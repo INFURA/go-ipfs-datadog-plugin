@@ -24,4 +24,4 @@ jobs:
       - name: Lint and Test
         uses: ./.ghaction-packed/go/zeroconfig
         with:
-          go_version: 1.16.8
+          go_version: 1.17
