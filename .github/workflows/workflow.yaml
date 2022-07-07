@@ -1,6 +1,9 @@
-name: Build and Test
+name: Lint and Test
 on:
-  push
+  pull_request:
+  push:
+    branches:
+      - master
 permissions:
   id-token: write
   contents: read
@@ -16,7 +19,7 @@ jobs:
         with:
           repository: infura/ghaction-packed
           token: ${{ secrets.JENKINS_INF_ACTIONS_PRIVATE_REPO_READ_TOKEN }}
-          ref: go-action
+          ref: v0.0.3
           path: .ghaction-packed
       - name: Lint and Test
         uses: ./.ghaction-packed/go/zeroconfig
