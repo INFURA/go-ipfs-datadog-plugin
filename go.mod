@@ -9,5 +9,5 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/stretchr/testify v1.7.1
 	go.opencensus.io v0.23.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.36.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.40.0
 )
