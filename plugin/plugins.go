@@ -1,6 +1,6 @@
 package plugin
 
-import "github.com/ipfs/go-ipfs/plugin"
+import "github.com/ipfs/kubo/plugin"
 
 var Plugins = []plugin.Plugin{
 	&TracingPlugin{},

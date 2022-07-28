@@ -3,7 +3,7 @@ package plugin
 import (
 	"testing"
 
-	"github.com/ipfs/go-ipfs/plugin"
+	"github.com/ipfs/kubo/plugin"
 	"github.com/stretchr/testify/require"
 )
 

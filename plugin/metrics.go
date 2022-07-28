@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	datadog "github.com/DataDog/opencensus-go-exporter-datadog"
-	"github.com/ipfs/go-ipfs/plugin"
+	"github.com/ipfs/kubo/plugin"
 	"go.opencensus.io/stats/view"
 )
 

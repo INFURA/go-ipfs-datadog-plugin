@@ -3,7 +3,7 @@ package plugin
 import (
 	"encoding/json"
 
-	"github.com/ipfs/go-ipfs/plugin"
+	"github.com/ipfs/kubo/plugin"
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 

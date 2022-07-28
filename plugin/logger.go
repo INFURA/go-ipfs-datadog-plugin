@@ -6,7 +6,7 @@ import (
 
 	logging "github.com/ipfs/go-log"
 
-	"github.com/ipfs/go-ipfs/plugin"
+	"github.com/ipfs/kubo/plugin"
 )
 
 const defaultLoggerLevel = "error"

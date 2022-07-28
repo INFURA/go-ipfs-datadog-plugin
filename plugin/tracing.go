@@ -3,8 +3,8 @@ package plugin
 import (
 	"encoding/json"
 
-	"github.com/ipfs/go-ipfs/plugin"
 	logging "github.com/ipfs/go-log"
+	"github.com/ipfs/kubo/plugin"
 	"github.com/opentracing/opentracing-go"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/opentracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"

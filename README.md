@@ -10,7 +10,7 @@ This repository contains the following `go-ipfs` plugins:
 
 - Plugins only work on Linux and MacOS at the moment. You can track the progress of this issue here: https://github.com/golang/go/issues/19282
 
-- If you are using go-ipfs 0.4.22 or older, some traces will be lost. See: https://github.com/ipfs/go-ipfs/pull/6672
+- If you are using go-ipfs 0.4.22 or older, some traces will be lost. See: https://github.com/ipfs/kubo/pull/6672
 
 
 ## Building and Installing

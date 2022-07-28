@@ -9,7 +9,7 @@ IPFS_PATH ?= $(HOME)/.ipfs
 
 # If set, override the IPFS version to build against. This _modifies_ the local
 # go.mod/go.sum files and permanently sets this version.
-IPFS_VERSION ?= $(lastword $(shell $(GOCC) list -m github.com/ipfs/go-ipfs))
+IPFS_VERSION ?= $(lastword $(shell $(GOCC) list -m github.com/ipfs/kubo))
 
 # make reproducible
 ifneq ($(findstring /,$(IPFS_VERSION)),)
