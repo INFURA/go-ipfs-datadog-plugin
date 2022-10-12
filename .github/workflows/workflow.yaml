@@ -17,11 +17,11 @@ jobs:
       - name: Check out actions
         uses: actions/checkout@v2
         with:
-          repository: infura/ghaction-packed
+          repository: infura/github-toolkit
           token: ${{ secrets.JENKINS_INF_ACTIONS_PRIVATE_REPO_READ_TOKEN }}
           ref: v0.0.3
-          path: .ghaction-packed
+          path: .github-toolkit
       - name: Lint and Test
-        uses: ./.ghaction-packed/go/zeroconfig
+        uses: ./.github-toolkit/go/zeroconfig
         with:
           go_version: 1.17
