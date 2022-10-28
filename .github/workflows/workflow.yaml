@@ -17,9 +17,9 @@ jobs:
       - name: Check out actions
         uses: actions/checkout@v2
         with:
-          repository: infura/github-toolkit
+          repository: consensys/github-toolkit
           token: ${{ secrets.JENKINS_INF_ACTIONS_PRIVATE_REPO_READ_TOKEN }}
-          ref: v0.0.3
+          ref: v1
           path: .github-toolkit
       - name: Lint and Test
         uses: ./.github-toolkit/go/zeroconfig
