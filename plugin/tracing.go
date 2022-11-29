@@ -12,7 +12,7 @@ import (
 
 var _ plugin.PluginTracer = &TracingPlugin{}
 
-const defaultTracerName = "go-ipfs"
+const defaultTracerName = "kubo"
 
 type tracerConfig struct {
 	TracerName string `json:"TracerName"`

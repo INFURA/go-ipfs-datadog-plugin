@@ -9,7 +9,7 @@ import (
 
 var _ plugin.Plugin = &ProfilerPlugin{}
 
-const defaultProfilerName = "go-ipfs"
+const defaultProfilerName = "kubo"
 
 type profilerConfig struct {
 	ProfilerName string `json:"ProfilerName"`

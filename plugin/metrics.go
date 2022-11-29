@@ -24,7 +24,7 @@ func (m MetricsPlugin) Version() string {
 
 func (m *MetricsPlugin) Init(env *plugin.Environment) error {
 	dd, err := datadog.NewExporter(datadog.Options{
-		Namespace: "go_ipfs",
+		Namespace: "kubo",
 	})
 	if err != nil {
 		return fmt.Errorf("failed to create the Datadog exporter: %v", err)
