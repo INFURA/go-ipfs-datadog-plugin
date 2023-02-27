@@ -7,7 +7,7 @@ require (
 	github.com/ipfs/go-log v1.0.5
 	github.com/ipfs/kubo v0.17.0
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.2
 	go.opencensus.io v0.23.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.43.1
 )
