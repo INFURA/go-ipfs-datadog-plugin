@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"fmt"
+	"os"
 
 	datadog "github.com/DataDog/opencensus-go-exporter-datadog"
 	"github.com/ipfs/kubo/plugin"
@@ -23,9 +24,15 @@ func (m MetricsPlugin) Version() string {
 }
 
 func (m *MetricsPlugin) Init(env *plugin.Environment) error {
-	dd, err := datadog.NewExporter(datadog.Options{
+	ddOptions := datadog.Options{
 		Namespace: "kubo",
-	})
+	}
+
+	if ddAgentAddr := os.Getenv("DD_AGENT_ADDR"); ddAgentAddr != "" {
+		ddOptions.TraceAddr = ddAgentAddr
+	}
+
+	dd, err := datadog.NewExporter(ddOptions)
 	if err != nil {
 		return fmt.Errorf("failed to create the Datadog exporter: %v", err)
 	}

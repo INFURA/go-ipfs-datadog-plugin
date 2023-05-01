@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"encoding/json"
+	"os"
 
 	logging "github.com/ipfs/go-log"
 	"github.com/ipfs/kubo/plugin"
@@ -35,12 +36,18 @@ func (t *TracingPlugin) Init(env *plugin.Environment) error {
 }
 
 func (t *TracingPlugin) InitTracer() (opentracing.Tracer, error) {
-	return opentracer.New(
+	tracerOptions := []tracer.StartOption{
 		tracer.WithServiceName(t.conf.TracerName),
 		tracer.WithLogger(logger{}),
 		tracer.WithRuntimeMetrics(),
 		tracer.WithAnalytics(true),
-	), nil
+	}
+
+	if ddAgentAddr := os.Getenv("DD_AGENT_ADDR"); ddAgentAddr != "" {
+		tracerOptions = append(tracerOptions, tracer.WithAgentAddr(ddAgentAddr))
+	}
+
+	return opentracer.New(tracerOptions...), nil
 }
 
 func (t *TracingPlugin) Close() error {

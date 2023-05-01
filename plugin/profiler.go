@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"encoding/json"
+	"os"
 
 	"github.com/ipfs/kubo/plugin"
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
@@ -33,13 +34,19 @@ func (p *ProfilerPlugin) Init(env *plugin.Environment) error {
 		return err
 	}
 
-	return profiler.Start(
+	profOptions := []profiler.Option{
 		profiler.WithService(p.conf.ProfilerName),
 		profiler.WithProfileTypes(
 			profiler.CPUProfile,
 			profiler.HeapProfile,
 		),
-	)
+	}
+
+	if ddAgentAddr := os.Getenv("DD_AGENT_ADDR"); ddAgentAddr != "" {
+		profOptions = append(profOptions, profiler.WithAgentAddr(ddAgentAddr))
+	}
+
+	return profiler.Start(profOptions...)
 }
 
 func (p *ProfilerPlugin) Close() error {
