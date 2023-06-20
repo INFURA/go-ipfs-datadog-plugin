@@ -12,7 +12,7 @@ func TestProfilerPluginDefault(t *testing.T) {
 	tp := &ProfilerPlugin{}
 	err := tp.Init(&plugin.Environment{Config: conf})
 	require.NoError(t, err)
-	require.Equal(t, defaultTracerName, tp.conf.ProfilerName)
+	require.Equal(t, defaultProfilerName, tp.conf.ProfilerName)
 }
 
 func TestProfilerPluginConfig(t *testing.T) {
