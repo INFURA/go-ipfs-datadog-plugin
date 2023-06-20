@@ -1,27 +1,20 @@
 name: Lint and Test
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
       - master
+
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  worflow:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Check out actions
-        uses: actions/checkout@v2
-        with:
-          repository: consensys/github-toolkit
-          token: ${{ secrets.JENKINS_INF_ACTIONS_PRIVATE_REPO_READ_TOKEN }}
-          ref: v1
-          path: .github-toolkit
-      - name: Lint and Test
-        uses: ./.github-toolkit/go/zeroconfig
-        with:
-          go_version: 1.17
+  review:
+    name: "Linting && Unit Test"
+    uses: consensys/github-toolkit/.github/workflows/go_review.yml@v1
+    with:
+      go_version: 1.17
+    secrets:
+      GH_READ_ONLY_TOKEN: ${{ secrets.INFURA_ORG_REPO_READ_ONLY }}
