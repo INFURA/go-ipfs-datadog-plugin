@@ -90,7 +90,7 @@ Like Kubo's `OpenTelemetry`-based tracing, `OpenTelemetry` metrics are configure
 
 ## Integration testing
 
-Rudimentary integration testing is provided for the OpenTelemetry-based metrics plugin.  To run these tests, a local configuration must be provided via environment variables to connect the OTEL exporter to a working OTEL collector.  Run the tests using the following command:
+Rudimentary integration testing is provided for the OpenTelemetry-based metrics plugin. To run these tests, a local configuration must be provided via environment variables to connect the OTEL exporter to a working OTEL collector. Run the tests using the following command:
 
 ```
 make integration
