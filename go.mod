@@ -3,7 +3,7 @@ module github.com/INFURA/go-ipfs-datadog-plugin
 go 1.18
 
 require (
-	github.com/ipfs/go-log v1.0.5
+	github.com/ipfs/go-log/v2 v2.5.1
 	github.com/ipfs/kubo v0.21.0
 	github.com/stretchr/testify v1.8.4
 	go.opentelemetry.io/contrib/propagators/autoprop v0.42.0
@@ -14,18 +14,18 @@ require (
 	go.opentelemetry.io/otel/metric v1.16.0
 	go.opentelemetry.io/otel/sdk v1.16.0
 	go.opentelemetry.io/otel/sdk/metric v0.39.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.51.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.52.0
 )
 
 require (
 	bazil.org/fuse v0.0.0-20200117225306-7b5117fecadc // indirect
 	github.com/DataDog/appsec-internal-go v1.0.0 // indirect
-	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.45.0-rc.1 // indirect
+	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.45.0 // indirect
 	github.com/DataDog/datadog-go/v5 v5.1.1 // indirect
 	github.com/DataDog/go-libddwaf v1.2.0 // indirect
 	github.com/DataDog/go-tuf v0.3.0--fix-localmeta-fork // indirect
 	github.com/DataDog/gostackparse v0.5.0 // indirect
-	github.com/Microsoft/go-winio v0.5.1 // indirect
+	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
 	github.com/benbjohnson/clock v1.3.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -45,7 +45,7 @@ require (
 	github.com/facebookgo/atomicfile v0.0.0-20151019160806-2de1f203e7d5 // indirect
 	github.com/flynn/noise v1.0.0 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.1 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
@@ -85,7 +85,7 @@ require (
 	github.com/ipfs/go-ipld-cbor v0.0.6 // indirect
 	github.com/ipfs/go-ipld-format v0.5.0 // indirect
 	github.com/ipfs/go-ipld-legacy v0.2.1 // indirect
-	github.com/ipfs/go-log/v2 v2.5.1 // indirect
+	github.com/ipfs/go-log v1.0.5 // indirect
 	github.com/ipfs/go-metrics-interface v0.0.1 // indirect
 	github.com/ipfs/go-peertaskqueue v0.8.1 // indirect
 	github.com/ipfs/go-unixfsnode v1.7.1 // indirect
@@ -157,7 +157,7 @@ require (
 	github.com/raulk/go-watchdog v1.3.0 // indirect
 	github.com/richardartoul/molecule v1.0.1-0.20221107223329-32cfee06a052 // indirect
 	github.com/samber/lo v1.36.0 // indirect
-	github.com/secure-systems-lab/go-securesystemslib v0.5.0 // indirect
+	github.com/secure-systems-lab/go-securesystemslib v0.6.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/ucarion/urlpath v0.0.0-20200424170820-7ccc79b76bbb // indirect
 	github.com/whyrusleeping/base32 v0.0.0-20170828182744-c30ac30633cc // indirect
@@ -193,7 +193,7 @@ require (
 	golang.org/x/tools v0.9.1 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	gonum.org/v1/gonum v0.13.0 // indirect
-	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4 // indirect
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	google.golang.org/grpc v1.55.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
