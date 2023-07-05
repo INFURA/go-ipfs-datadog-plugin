@@ -86,11 +86,11 @@ Define plugin configurations variables in the ipfs config file.
 
 - otel-metrics
 
-  Like Kubo's `OpenTelemetry`-based tracing, `OpenTelemetry` metrics are configured via environment variables. A Sample `.envrc` file is provided.  Make a copy named `.envrc` and follow the instructions to configure the plugin.  For other execution environments, these environment variables should be provided via the particular systems environment mechanism (e.g. through a Kubernetes `ConfigMap`.)
+Like Kubo's `OpenTelemetry`-based tracing, `OpenTelemetry` metrics are configured via environment variables. A Sample `.envrc-sample` file is provided. Make a copy named `.envrc` and follow the instructions to configure the plugin. For other execution environments, these environment variables should be provided via the particular systems environment mechanism (e.g. through a Kubernetes `ConfigMap`.)
 
 ## Integration testing
 
-Rudimentary integration testing is provided for the OpenTelemetry-based metrics plugin.  To run these tests, a local configuration must be provided via environment variables to connect the OTEL exporter to a working OTEL collector.  Run the tests using the following command:
+Rudimentary integration testing is provided for the OpenTelemetry-based metrics plugin. To run these tests, a local configuration must be provided via environment variables to connect the OTEL exporter to a working OTEL collector. Run the tests using the following command:
 
 ```
 make integration
@@ -101,7 +101,7 @@ The integration tests will take about 5 minutes and should result in the followi
 - `go-ipfs-datadog-plugin.integration_test.counter`
 - `go-ipfs-datadog-plugin.integration_test.histogram`
 
-Manually verify the presence of thes metrics in your collector.
+Manually verify the presence of these metrics in your collector.
 
 ## References
 
