@@ -1,7 +1,7 @@
 # The following environment variable is required to "activate" the
 # Metrics plugin.  If this value is not set, a no-op metrics exporter 
 # is created.
-export OTEL_METRICS_EXPORTER=otlp
+export OTEL_METRICS_EXPORTER=otlp,stdout
 
 # The following three environment variables are shown with their default
 # values but, at a minimum, the OTLP endpoint will need to be specified.
