@@ -101,7 +101,7 @@ The integration tests will take about 5 minutes and should result in the followi
 - `go-ipfs-datadog-plugin.integration_test.counter`
 - `go-ipfs-datadog-plugin.integration_test.histogram`
 
-Manually verify the presence of thes metrics in your collector.
+Manually verify the presence of these metrics in your collector.
 
 ## References
 
