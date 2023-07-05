@@ -1,10 +1,9 @@
 # go-ipfs-datadog-plugin
 
 This repository contains the following `go-ipfs` plugins:
-- Datadog tracing plugin configures the Datadog tracer to collect the traces and relay them to the agent. `go-ipfs` tracing instrumentation is partial at the moment but should improve over time.
 - Datadog continuous profiler plugin configure the Datadog profiler to capture CPU and memory usage over time.
 - Datadog logger plugin allows users to set log levels for each `go-ipfs` subsystem. 
-- Datadog metrics plugin configure a datadog exporter for OpenCensus metrics.
+- OpenTelemetry metrics plugin configures an OTLP exporter that sends metrics to an OpenTelemetry collector.
 
 ## Caveats
 
@@ -67,26 +66,6 @@ Define plugin configurations variables in the ipfs config file.
 }
 ```
 
-- datadog-tracer config:
-```
-{
-...
-"Plugins": {
-    "Plugins": {
-      ...
-      "datadog-tracer": {
-        "Config": {
-            "TracerName": "go-ipfs-custom"
-        },
-        "Disabled": false
-      }
-      ...
-    }
-  },
-...
-}
-```
-
 - datadog-profiler config:
  ```
 ...
@@ -104,6 +83,25 @@ Define plugin configurations variables in the ipfs config file.
   },
 ...
 ```
+
+- otel-metrics
+
+  Like Kubo's `OpenTelemetry`-based tracing, `OpenTelemetry` metrics are configured via environment variables. A Sample `.envrc` file is provided.  Make a copy named `.envrc` and follow the instructions to configure the plugin.  For other execution environments, these environment variables should be provided via the particular systems environment mechanism (e.g. through a Kubernetes `ConfigMap`.)
+
+## Integration testing
+
+Rudimentary integration testing is provided for the OpenTelemetry-based metrics plugin.  To run these tests, a local configuration must be provided via environment variables to connect the OTEL exporter to a working OTEL collector.  Run the tests using the following command:
+
+```
+make integration
+```
+
+The integration tests will take about 5 minutes and should result in the following metrics being sent to your collector:
+
+- `go-ipfs-datadog-plugin.integration_test.counter`
+- `go-ipfs-datadog-plugin.integration_test.histogram`
+
+Manually verify the presence of thes metrics in your collector.
 
 ## References
 
