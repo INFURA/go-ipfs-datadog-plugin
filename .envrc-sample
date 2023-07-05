@@ -1,0 +1,15 @@
+# The following environment variable is required to "activate" the
+# Metrics plugin.  If this value is not set, a no-op metrics exporter 
+# is created.
+export OTEL_METRICS_EXPORTER=otlp
+
+# The following three environment variables are shown with their default
+# values but, at a minimum, the OTLP endpoint will need to be specified.
+# The complete set of environment variables available to configure the
+# OpenTelemetry OTLP Metrics exporter are described at
+# https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md
+
+# export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+# export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://localhost:4317
+# export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+# export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=grpc

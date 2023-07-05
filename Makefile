@@ -36,3 +36,12 @@ build: datadog-plugin.so
 
 install: build
 	install -Dm700 datadog-plugin.so "$(IPFS_PATH)/plugins/datadog.so"
+
+#
+# Testing
+#
+
+.PHONY: integration
+
+integration:
+	INTEGRATION=1 go test -v -count=1 -timeout 900s ./plugin/... -run TestOpenTelemetryIntegration
