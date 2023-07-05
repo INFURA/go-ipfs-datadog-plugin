@@ -1,43 +1,201 @@
 package plugin
 
 import (
+	"context"
+	"errors"
 	"fmt"
+	"os"
+	"strings"
 
-	datadog "github.com/DataDog/opencensus-go-exporter-datadog"
 	"github.com/ipfs/kubo/plugin"
-	"go.opencensus.io/stats/view"
+	"go.opentelemetry.io/contrib/propagators/autoprop"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
+	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
+	metricapi "go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/metric/noop"
+	"go.opentelemetry.io/otel/sdk/metric"
+	"go.opentelemetry.io/otel/sdk/resource"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 )
 
-var _ plugin.Plugin = &MetricsPlugin{}
+const (
+	envVarMetricsExporter     = "OTEL_METRICS_EXPORTER"
+	envVarOTLPProtocol        = "OTEL_EXPORTER_OTLP_PROTOCOL"
+	envVarOTLPMetricsProtocol = "OTEL_EXPORTER_OTLP_METRICS_PROTOCOL"
+)
 
+const (
+	otlpProtocolNameGRPC = "grpc"
+	otlpProtocolNameHTTP = "http/protobuf"
+)
+
+const (
+	metricPluginName     = "otel-metrics"
+	metricsPluginVersion = "v0.8.1"
+)
+
+type shutDownMeterProvider interface {
+	metricapi.MeterProvider
+	Shutdown(ctx context.Context) error
+}
+
+var _ shutDownMeterProvider = (*noopShutdownMeterProvider)(nil)
+
+type noopShutdownMeterProvider struct {
+	metricapi.MeterProvider
+}
+
+func (n *noopShutdownMeterProvider) Shutdown(_ context.Context) error {
+	return nil
+}
+
+var _ plugin.Plugin = (*MetricsPlugin)(nil)
+
+// MetricsPlugin configures the OpenTelemetry metrics exporter into the
+// default MeterProvider which can be retrieved via otel.GetMeterProvider.
+//
+// See: https://pkg.go.dev/github.com/ipfs/kubo/plugin#Plugin
 type MetricsPlugin struct {
-	exporter *datadog.Exporter
+	shutDownMeterProvider
+	exporters []metric.Exporter
 }
 
+// Name returns the name of the plugin.
 func (m MetricsPlugin) Name() string {
-	return "datadog-metrics"
+	return metricPluginName
 }
 
+// Version returns the version of the plugin.
 func (m MetricsPlugin) Version() string {
-	return "0.0.1"
+	return metricsPluginVersion
 }
 
-func (m *MetricsPlugin) Init(env *plugin.Environment) error {
-	dd, err := datadog.NewExporter(datadog.Options{
-		Namespace: "kubo",
-	})
+// Init initializes the kubo plugin (from environment variables).
+func (m *MetricsPlugin) Init(_ *plugin.Environment) error {
+	mp, exps, err := newMeterProvider(context.Background())
 	if err != nil {
-		return fmt.Errorf("failed to create the Datadog exporter: %v", err)
+		return err
 	}
 
-	m.exporter = dd
-
-	view.RegisterExporter(dd)
+	m.shutDownMeterProvider = mp
+	m.exporters = exps
+	otel.SetMeterProvider(mp)
+	otel.SetTextMapPropagator(autoprop.NewTextMapPropagator())
 
 	return nil
 }
 
+// Close safely shuts down the plugin.
 func (m *MetricsPlugin) Close() error {
-	m.exporter.Stop()
-	return nil
+	var err error
+
+	// for _, exp := range m.exporters {
+	// 	err = errors.Join(err, exp.ForceFlush(context.Background()))
+	// }
+
+	return errors.Join(err, m.Shutdown(context.Background()))
+}
+
+func newMeterProvider(ctx context.Context) (shutDownMeterProvider, []metric.Exporter, error) {
+	exporters, err := newMetricsExporters(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if len(exporters) < 1 {
+		return &noopShutdownMeterProvider{noop.NewMeterProvider()}, nil, nil
+	}
+
+	options := []metric.Option{}
+	for _, exporter := range exporters {
+		options = append(options, metric.WithReader(metric.NewPeriodicReader(exporter)))
+	}
+
+	res, err := resource.Merge(
+		resource.Default(),
+		resource.NewSchemaless(
+			semconv.ServiceNameKey.String("kubo"),
+			semconv.ServiceNamespaceKey.String("ipfs"),
+			semconv.ServiceVersionKey.String("v0.20.0"),
+			semconv.TelemetrySDKLanguageGo,
+		),
+	)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	options = append(options, metric.WithResource(res))
+
+	return metric.NewMeterProvider(options...), exporters, nil
+}
+
+var (
+	errUnsupportedExporter      = errors.New("unknown or unsupported exporter")
+	errUnsupportedProtocol      = errors.New("unknown or unsupported OTLP protocol")
+	errBuildingOTLPgRPCExporter = errors.New("building OTLP gRPC exporter")
+	errBuildingOTLPHTTPExporter = errors.New("building OTLP HTTP exporter")
+	errBuildingStdoutExporter   = errors.New("building STDOUT exporter")
+)
+
+// newMetricExporters returns zero or more metrics exporters configured
+// strictly though environment variables.  Like kubo's OpenTelemetry
+// trace configuration.  See the README for set-up instructions.
+func newMetricsExporters(ctx context.Context) ([]metric.Exporter, error) {
+	for _, s := range os.Environ() {
+		if strings.HasPrefix(s, "OTEL") {
+			fmt.Println(s)
+		}
+	}
+
+	var exporters []metric.Exporter
+
+	exporterEnvVar := os.Getenv(envVarMetricsExporter)
+	if exporterEnvVar == "" {
+		return exporters, nil
+	}
+
+	for _, s := range strings.Split(exporterEnvVar, ",") {
+		if s != "otlp" {
+			return nil, fmt.Errorf("%w %s", errUnsupportedExporter, s)
+		}
+
+		protocol := otlpProtocolNameHTTP
+		if v := os.Getenv(envVarOTLPProtocol); v != "" {
+			protocol = v
+		}
+		if v := os.Getenv(envVarOTLPMetricsProtocol); v != "" {
+			protocol = v
+		}
+
+		switch protocol {
+		case otlpProtocolNameHTTP:
+			exporter, err := otlpmetrichttp.New(ctx)
+			if err != nil {
+				return nil, errors.Join(errBuildingOTLPHTTPExporter, err)
+			}
+			exporters = append(exporters, exporter)
+		case otlpProtocolNameGRPC:
+			exporter, err := otlpmetricgrpc.New(ctx)
+			if err != nil {
+				return nil, errors.Join(errBuildingOTLPgRPCExporter, err)
+			}
+			exporters = append(exporters, exporter)
+		default:
+			return nil, fmt.Errorf("%w %s", errUnsupportedProtocol, protocol)
+		}
+	}
+
+	stdoutExporter, err := stdoutmetric.New()
+	if err != nil {
+		return nil, errors.Join(errBuildingStdoutExporter)
+	}
+
+	_ = stdoutExporter
+
+	// Uncomment the following line to also send metrics to STDOUT (in JSON format)
+	// exporters = append(exporters, stdoutExporter)
+
+	return exporters, nil
 }
