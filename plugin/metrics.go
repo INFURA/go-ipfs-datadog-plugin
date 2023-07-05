@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
+	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
 	metricapi "go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/metric/noop"
 	"go.opentelemetry.io/otel/sdk/metric"
@@ -142,43 +143,43 @@ func newMetricsExporters(ctx context.Context) ([]metric.Exporter, error) {
 	}
 
 	for _, s := range strings.Split(exporterEnvVar, ",") {
-		if s != "otlp" {
-			return nil, fmt.Errorf("%w %s", errUnsupportedExporter, s)
-		}
 
-		protocol := otlpProtocolNameHTTP
-		if v := os.Getenv(envVarOTLPProtocol); v != "" {
-			protocol = v
-		}
-		if v := os.Getenv(envVarOTLPMetricsProtocol); v != "" {
-			protocol = v
-		}
-
-		switch protocol {
-		case otlpProtocolNameHTTP:
-			exporter, err := otlpmetrichttp.New(ctx)
-			if err != nil {
-				return nil, errors.Join(errBuildingOTLPHTTPExporter, err)
+		switch s {
+		case "otlp":
+			protocol := otlpProtocolNameHTTP
+			if v := os.Getenv(envVarOTLPProtocol); v != "" {
+				protocol = v
 			}
-			exporters = append(exporters, exporter)
-		case otlpProtocolNameGRPC:
-			exporter, err := otlpmetricgrpc.New(ctx)
+			if v := os.Getenv(envVarOTLPMetricsProtocol); v != "" {
+				protocol = v
+			}
+
+			switch protocol {
+			case otlpProtocolNameHTTP:
+				exporter, err := otlpmetrichttp.New(ctx)
+				if err != nil {
+					return nil, errors.Join(errBuildingOTLPHTTPExporter, err)
+				}
+				exporters = append(exporters, exporter)
+			case otlpProtocolNameGRPC:
+				exporter, err := otlpmetricgrpc.New(ctx)
+				if err != nil {
+					return nil, errors.Join(errBuildingOTLPgRPCExporter, err)
+				}
+				exporters = append(exporters, exporter)
+			default:
+				return nil, fmt.Errorf("%w %s", errUnsupportedProtocol, protocol)
+			}
+		case "stdout":
+			exporter, err := stdoutmetric.New()
 			if err != nil {
-				return nil, errors.Join(errBuildingOTLPgRPCExporter, err)
+				return nil, errors.Join(errBuildingStdoutExporter, err)
 			}
 			exporters = append(exporters, exporter)
 		default:
-			return nil, fmt.Errorf("%w %s", errUnsupportedProtocol, protocol)
+			return nil, fmt.Errorf("%w %s", errUnsupportedExporter, s)
 		}
 	}
-
-	// Uncomment the following lines to also send metrics to STDOUT (in JSON format)
-	// stdoutExporter, err := stdoutmetric.New()
-	// if err != nil {
-	// 	return nil, errors.Join(errBuildingStdoutExporter)
-	// }
-
-	// exporters = append(exporters, stdoutExporter)
 
 	return exporters, nil
 }
