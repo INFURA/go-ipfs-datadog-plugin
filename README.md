@@ -86,7 +86,7 @@ Define plugin configurations variables in the ipfs config file.
 
 - otel-metrics
 
-  Like Kubo's `OpenTelemetry`-based tracing, `OpenTelemetry` metrics are configured via environment variables. A Sample `.envrc` file is provided.  Make a copy named `.envrc` and follow the instructions to configure the plugin.  For other execution environments, these environment variables should be provided via the particular systems environment mechanism (e.g. through a Kubernetes `ConfigMap`.)
+Like Kubo's `OpenTelemetry`-based tracing, `OpenTelemetry` metrics are configured via environment variables. A Sample `.envrc-sample` file is provided. Make a copy named `.envrc` and follow the instructions to configure the plugin. For other execution environments, these environment variables should be provided via the particular systems environment mechanism (e.g. through a Kubernetes `ConfigMap`.)
 
 ## Integration testing
 
