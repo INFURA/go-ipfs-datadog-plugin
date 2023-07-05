@@ -12,7 +12,6 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
-	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
 	metricapi "go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/metric/noop"
 	"go.opentelemetry.io/otel/sdk/metric"
@@ -89,13 +88,7 @@ func (m *MetricsPlugin) Init(_ *plugin.Environment) error {
 
 // Close safely shuts down the plugin.
 func (m *MetricsPlugin) Close() error {
-	var err error
-
-	// for _, exp := range m.exporters {
-	// 	err = errors.Join(err, exp.ForceFlush(context.Background()))
-	// }
-
-	return errors.Join(err, m.Shutdown(context.Background()))
+	return m.Shutdown(context.Background())
 }
 
 func newMeterProvider(ctx context.Context) (shutDownMeterProvider, []metric.Exporter, error) {
@@ -117,8 +110,6 @@ func newMeterProvider(ctx context.Context) (shutDownMeterProvider, []metric.Expo
 		resource.Default(),
 		resource.NewSchemaless(
 			semconv.ServiceNameKey.String("kubo"),
-			semconv.ServiceNamespaceKey.String("ipfs"),
-			semconv.ServiceVersionKey.String("v0.20.0"),
 			semconv.TelemetrySDKLanguageGo,
 		),
 	)
@@ -143,12 +134,6 @@ var (
 // strictly though environment variables.  Like kubo's OpenTelemetry
 // trace configuration.  See the README for set-up instructions.
 func newMetricsExporters(ctx context.Context) ([]metric.Exporter, error) {
-	for _, s := range os.Environ() {
-		if strings.HasPrefix(s, "OTEL") {
-			fmt.Println(s)
-		}
-	}
-
 	var exporters []metric.Exporter
 
 	exporterEnvVar := os.Getenv(envVarMetricsExporter)
@@ -187,14 +172,12 @@ func newMetricsExporters(ctx context.Context) ([]metric.Exporter, error) {
 		}
 	}
 
-	stdoutExporter, err := stdoutmetric.New()
-	if err != nil {
-		return nil, errors.Join(errBuildingStdoutExporter)
-	}
+	// Uncomment the following lines to also send metrics to STDOUT (in JSON format)
+	// stdoutExporter, err := stdoutmetric.New()
+	// if err != nil {
+	// 	return nil, errors.Join(errBuildingStdoutExporter)
+	// }
 
-	_ = stdoutExporter
-
-	// Uncomment the following line to also send metrics to STDOUT (in JSON format)
 	// exporters = append(exporters, stdoutExporter)
 
 	return exporters, nil
