@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/ipfs/kubo/plugin"
 	"go.opentelemetry.io/contrib/propagators/autoprop"
@@ -89,7 +90,9 @@ func (m *MetricsPlugin) Init(_ *plugin.Environment) error {
 
 // Close safely shuts down the plugin.
 func (m *MetricsPlugin) Close() error {
-	return m.Shutdown(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	return m.Shutdown(ctx)
 }
 
 func newMeterProvider(ctx context.Context) (shutDownMeterProvider, []metric.Exporter, error) {
@@ -102,7 +105,7 @@ func newMeterProvider(ctx context.Context) (shutDownMeterProvider, []metric.Expo
 		return &noopShutdownMeterProvider{noop.NewMeterProvider()}, nil, nil
 	}
 
-	options := []metric.Option{}
+	var options []metric.Option
 	for _, exporter := range exporters {
 		options = append(options, metric.WithReader(metric.NewPeriodicReader(exporter)))
 	}
@@ -158,26 +161,26 @@ func newMetricsExporters(ctx context.Context) ([]metric.Exporter, error) {
 			case otlpProtocolNameHTTP:
 				exporter, err := otlpmetrichttp.New(ctx)
 				if err != nil {
-					return nil, errors.Join(errBuildingOTLPHTTPExporter, err)
+					return nil, fmt.Errorf("%w: %w", errBuildingOTLPHTTPExporter, err)
 				}
 				exporters = append(exporters, exporter)
 			case otlpProtocolNameGRPC:
 				exporter, err := otlpmetricgrpc.New(ctx)
 				if err != nil {
-					return nil, errors.Join(errBuildingOTLPgRPCExporter, err)
+					return nil, fmt.Errorf("%w: %w", errBuildingOTLPgRPCExporter, err)
 				}
 				exporters = append(exporters, exporter)
 			default:
-				return nil, fmt.Errorf("%w %s", errUnsupportedProtocol, protocol)
+				return nil, fmt.Errorf("%w: %s", errUnsupportedProtocol, protocol)
 			}
 		case "stdout":
 			exporter, err := stdoutmetric.New()
 			if err != nil {
-				return nil, errors.Join(errBuildingStdoutExporter, err)
+				return nil, fmt.Errorf("%w: %w", errBuildingStdoutExporter, err)
 			}
 			exporters = append(exporters, exporter)
 		default:
-			return nil, fmt.Errorf("%w %s", errUnsupportedExporter, s)
+			return nil, fmt.Errorf("%w: %s", errUnsupportedExporter, s)
 		}
 	}
 
