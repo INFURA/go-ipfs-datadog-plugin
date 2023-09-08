@@ -14,16 +14,16 @@ require (
 	go.opentelemetry.io/otel/metric v1.16.0
 	go.opentelemetry.io/otel/sdk v1.16.0
 	go.opentelemetry.io/otel/sdk/metric v0.39.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.52.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.54.1
 )
 
 require (
 	bazil.org/fuse v0.0.0-20200117225306-7b5117fecadc // indirect
 	github.com/DataDog/appsec-internal-go v1.0.0 // indirect
-	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.45.0 // indirect
+	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.48.0-devel.0.20230725154044-2549ba9058df // indirect
 	github.com/DataDog/datadog-go/v5 v5.1.1 // indirect
-	github.com/DataDog/go-libddwaf v1.2.0 // indirect
-	github.com/DataDog/go-tuf v0.3.0--fix-localmeta-fork // indirect
+	github.com/DataDog/go-libddwaf v1.4.2 // indirect
+	github.com/DataDog/go-tuf v1.0.1-0.5.2 // indirect
 	github.com/DataDog/gostackparse v0.5.0 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
@@ -41,6 +41,7 @@ require (
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/ebitengine/purego v0.5.0-alpha // indirect
 	github.com/elastic/gosigar v0.14.2 // indirect
 	github.com/facebookgo/atomicfile v0.0.0-20151019160806-2de1f203e7d5 // indirect
 	github.com/flynn/noise v1.0.0 // indirect
@@ -157,7 +158,7 @@ require (
 	github.com/raulk/go-watchdog v1.3.0 // indirect
 	github.com/richardartoul/molecule v1.0.1-0.20221107223329-32cfee06a052 // indirect
 	github.com/samber/lo v1.36.0 // indirect
-	github.com/secure-systems-lab/go-securesystemslib v0.6.0 // indirect
+	github.com/secure-systems-lab/go-securesystemslib v0.7.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/ucarion/urlpath v0.0.0-20200424170820-7ccc79b76bbb // indirect
 	github.com/whyrusleeping/base32 v0.0.0-20170828182744-c30ac30633cc // indirect
@@ -183,13 +184,13 @@ require (
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	go4.org/intern v0.0.0-20211027215823-ae77deb06f29 // indirect
 	go4.org/unsafe/assume-no-moving-gc v0.0.0-20220617031537-928513b29760 // indirect
-	golang.org/x/crypto v0.10.0 // indirect
+	golang.org/x/crypto v0.11.0 // indirect
 	golang.org/x/exp v0.0.0-20230321023759-10a507213a29 // indirect
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.9.0 // indirect
-	golang.org/x/text v0.10.0 // indirect
+	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/text v0.11.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	gonum.org/v1/gonum v0.13.0 // indirect
