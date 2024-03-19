@@ -1,7 +1,6 @@
 # go-ipfs-datadog-plugin
 
 This repository contains the following `go-ipfs` plugins:
-- Datadog continuous profiler plugin configure the Datadog profiler to capture CPU and memory usage over time.
 - Datadog logger plugin allows users to set log levels for each `go-ipfs` subsystem. 
 - OpenTelemetry metrics plugin configures an OTLP exporter that sends metrics to an OpenTelemetry collector.
 
@@ -64,24 +63,6 @@ Define plugin configurations variables in the ipfs config file.
   },
 ...
 }
-```
-
-- datadog-profiler config:
- ```
-...
-"Plugins": {
-    "Plugins": {
-      ...
-      "datadog-profiler": {
-        "Config": {
-            "TracerName": "go-ipfs-custom"
-        },
-        "Disabled": false
-      }
-      ...
-    }
-  },
-...
 ```
 
 - otel-metrics
