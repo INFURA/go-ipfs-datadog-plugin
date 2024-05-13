@@ -13,8 +13,9 @@ permissions:
 jobs:
   review:
     name: "Linting && Unit Test"
-    uses: consensys/github-toolkit/.github/workflows/go_review.yml@v1
+    uses: consensys/github-toolkit/.github/workflows/go_review.yml@v2
     with:
       go_version: 1.17
     secrets:
-      GH_READ_ONLY_TOKEN: ${{ secrets.INFURA_ORG_REPO_READ_ONLY }}
+      GH_READ_APP_ID: ${{ secrets._GITHUB_READ_APP_ID }}
+      GH_READ_APP_PRIVATE_KEY: ${{ secrets._GITHUB_READ_APP_PRIVATE_KEY }}
