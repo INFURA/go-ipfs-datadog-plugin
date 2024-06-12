@@ -8,14 +8,14 @@ require (
 	github.com/ipfs/go-log/v2 v2.5.1
 	github.com/ipfs/kubo v0.27.0
 	github.com/stretchr/testify v1.9.0
-	go.opentelemetry.io/contrib/propagators/autoprop v0.52.0
-	go.opentelemetry.io/otel v1.27.0
-	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v1.27.0
-	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp v1.27.0
-	go.opentelemetry.io/otel/exporters/stdout/stdoutmetric v1.27.0
-	go.opentelemetry.io/otel/metric v1.27.0
-	go.opentelemetry.io/otel/sdk v1.27.0
-	go.opentelemetry.io/otel/sdk/metric v1.27.0
+	go.opentelemetry.io/contrib/propagators/autoprop v0.46.1
+	go.opentelemetry.io/otel v1.22.0
+	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.44.0
+	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp v0.44.0
+	go.opentelemetry.io/otel/exporters/stdout/stdoutmetric v0.44.0
+	go.opentelemetry.io/otel/metric v1.22.0
+	go.opentelemetry.io/otel/sdk v1.21.0
+	go.opentelemetry.io/otel/sdk/metric v1.21.0
 )
 
 require (
@@ -166,11 +166,11 @@ require (
 	github.com/whyrusleeping/go-keyspace v0.0.0-20160322163242-5b898ac5add1 // indirect
 	github.com/whyrusleeping/multiaddr-filter v0.0.0-20160516205228-e903e4adabd7 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/contrib/propagators/aws v1.27.0 // indirect
-	go.opentelemetry.io/contrib/propagators/b3 v1.27.0 // indirect
-	go.opentelemetry.io/contrib/propagators/jaeger v1.27.0 // indirect
-	go.opentelemetry.io/contrib/propagators/ot v1.27.0 // indirect
-	go.opentelemetry.io/otel/trace v1.27.0 // indirect
+	go.opentelemetry.io/contrib/propagators/aws v1.21.1 // indirect
+	go.opentelemetry.io/contrib/propagators/b3 v1.22.0 // indirect
+	go.opentelemetry.io/contrib/propagators/jaeger v1.22.0 // indirect
+	go.opentelemetry.io/contrib/propagators/ot v1.22.0 // indirect
+	go.opentelemetry.io/otel/trace v1.22.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.2.0 // indirect
 	go.uber.org/dig v1.17.1 // indirect
 	go.uber.org/fx v1.20.1 // indirect
