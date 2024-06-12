@@ -113,7 +113,11 @@ func newMeterProvider(ctx context.Context) (shutDownMeterProvider, []metric.Expo
 	res, err := resource.Merge(
 		resource.Default(),
 		resource.NewSchemaless(
-			semconv.ServiceNameKey.String("kubo"),
+			// This name is uppercase and not prefixed with "ipfs-" to match the
+			// tracing service name already included in the external Kubo project.
+			//
+			// See: https://github.com/ipfs/kubo/blob/a07852a3f0294974b802923fb136885ad077384e/tracing/tracing.go#L66
+			semconv.ServiceNameKey.String("Kubo"),
 			semconv.TelemetrySDKLanguageGo,
 		),
 	)
